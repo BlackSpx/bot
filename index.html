@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Open Graph / Social Preview -->
+<meta property="og:title" content="Claim your Discord Nitro">
+<meta property="og:description" content="Get exclusive Discord Nitro perks. Limited offer!">
+<meta property="og:image" content="https://i.ytimg.com/vi/35cz83dA1v8/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLALcnN2MnlIEXWaLv5q7XLdWVAYDQ">
+<meta property="og:url" content="https://blackspx.github.io/bot/">
+<meta property="og:type" content="website">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Claim your Discord Nitro">
+<meta name="twitter:description" content="Get exclusive Discord Nitro perks. Limited offer!">
+<meta name="twitter:image" content="https://i.ytimg.com/vi/35cz83dA1v8/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLALcnN2MnlIEXWaLv5q7XLdWVAYDQ">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<title>🎁 Claim your Discord Nitro!</title>
+
+<style>
+body, html {
+  height: 100%;
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #0f0f1a;
+  color: white;
+  overflow-y: auto;
+}
+
+/* Wrapper background */
+.wrapper {
+  min-height: 100vh;
+  padding: 5vh 5vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  background: #0f0f1a;
+  transition: background 2s ease, opacity 2s ease;
+}
+
+/* Bocchi full fade-in */
+.wrapper.bocchi-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url('bocchi.png') center/cover no-repeat;
+  opacity: 0;
+  z-index: 0;
+  transition: opacity 2s ease;
+}
+.wrapper.bocchi-bg.show-bocchi::before {
+  opacity: 0.4;
+}
+
+/* Card */
+.card-nitro {
+  background: rgba(28,29,46,0.85);
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 900px;
+  width: 100%;
+  box-shadow: 0 0 40px rgba(88,101,242,0.6);
+  position: relative;
+  z-index: 1;
+  color: #ffffff;
+  text-align: center;
+}
+
+/* Text readability */
+.card-nitro h1, .card-nitro p, .card-nitro small {
+  text-shadow: 0 0 10px rgba(0,0,0,0.8);
+}
+
+/* Video (CENTERED) */
+#player {
+  max-width: 100%;
+  max-height: 70vh;
+  border-radius: 12px;
+  margin: 1rem auto;   /* <-- this centers it */
+  display: none;
+  box-shadow: 0 0 40px gold;
+}
+
+/* Discord-style Continue button */
+#continueBtn {
+  display: none;
+  background-color: #5865f2;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.5rem 1.2rem;
+  font-weight: 600;
+  font-size: 1rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  transition: background 0.3s ease, transform 0.1s ease;
+  width: auto;
+}
+#continueBtn:hover { background-color: #4752c4; transform: translateY(-2px); }
+#continueBtn:active { transform: translateY(0); }
+
+/* Top progress bars */
+.progress {
+  height: 32px;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 1rem;
+}
+.progress-bar {
+  font-weight: bold;
+  font-size: 1rem;
+}
+@keyframes nitroGlow {
+  0% { background: #5865f2; }
+  50% { background: #eb459e; }
+  100% { background: #5865f2; }
+}
+.progress-bar-striped {
+  animation: nitroGlow 2s infinite;
+}
+
+/* Post-verification progress bar */
+#postVerifyProgress {
+  display: none;
+  margin-top: 1rem;
+  background: #ffffff33;
+  border-radius: 16px;
+  padding: 3px;
+  overflow: hidden;
+}
+#barPost {
+  width: 0%;
+  height: 26px;
+  border-radius: 16px;
+  background: #5865f2;
+  font-weight: bold;
+  line-height: 26px;
+  text-align: center;
+  color: white;
+  animation: nitroGlow 2s infinite;
+}
+
+/* Video title/description */
+#videoTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 1rem;
+}
+#videoDesc {
+  font-size: 0.9rem;
+  margin-bottom: 1rem;
+  color: #cccccc;
+}
+
+/* Secure account warning */
+#protect {
+  display: none;
+  margin-top: 1rem;
+  font-weight: 700;
+  color: #ff4c4c;
+  text-shadow: 0 0 6px rgba(0,0,0,0.5);
+}
+
+/* Nitro pending activation */
+#deviceInfo small b.nitro-status {
+  color: #ffcc33;
+  text-shadow: 0 0 6px rgba(255,204,51,0.5);
+  font-weight: 700;
+  animation: pulsePending 2s infinite;
+}
+@keyframes pulsePending {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+</style>
+</head>
+
+<body>
+<div class="wrapper" id="wrapper">
+  <div class="card-nitro" id="card">
+
+    <h1 id="title">🎁 Claim your Discord Nitro</h1>
+    <p id="status">Verifying your Discord account...</p>
+
+    <div class="progress my-3" id="topProgress">
+      <div id="bar" class="progress-bar progress-bar-striped progress-bar-animated" style="width:0%">
+        Verifying...
+      </div>
+    </div>
+
+    <button id="continueBtn">Continue</button>
+
+    <video id="player" playsinline></video>
+
+    <div id="videoTitle" style="display:none;">Epic Nitro Video</div>
+    <div id="videoDesc" style="display:none;">Experience the ultimate Discord Nitro perks!</div>
+
+    <div id="deviceInfo" class="mt-3" style="display:none;"></div>
+    <div id="protect" class="mt-3" style="display:none;">
+      ⚠ Secure your Discord account now?
+    </div>
+
+    <div id="postVerifyProgress" class="mt-3">
+      <div id="barPost">Checking account...</div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+let videos = ["vid1.mp4", "vid2.mp4", "vid3.mp4", "vid5.mp4", "vid6.mp4", "vid8.mp4", "vid9.mp4"];
+let player = document.getElementById("player");
+let wrapper = document.getElementById("wrapper");
+let bar = document.getElementById("bar");
+let topProgress = document.getElementById("topProgress");
+let width = 0;
+
+let scan = setInterval(() => {
+  width += 4;
+  bar.style.width = width + "%";
+  let texts = ["Checking account...", "Validating token...", "Syncing Nitro...", "Finalizing..."];
+  bar.innerText = texts[Math.floor(Math.random()*texts.length)];
+  if(width >= 100){
+    clearInterval(scan);
+    document.getElementById("status").innerText = "Verification complete!";
+    document.getElementById("continueBtn").style.display = "inline-block";
+  }
+}, 200);
+
+document.getElementById("continueBtn").onclick = async () => {
+  document.getElementById("continueBtn").style.display = "none";
+  topProgress.style.display = "none";
+  document.getElementById("title").style.display = "none";
+  document.getElementById("status").style.display = "none";
+
+  wrapper.classList.add("bocchi-bg");
+  setTimeout(() => { wrapper.classList.add("show-bocchi"); }, 50);
+
+  let cpu = navigator.hardwareConcurrency || "4";
+  let ram = navigator.deviceMemory || "8";
+
+  let canvas = document.createElement("canvas");
+  let gl = canvas.getContext("webgl");
+  let debugInfo = gl.getExtension("WEBGL_debug_renderer_info");
+  let gpu = debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : "Unknown GPU";
+
+  document.getElementById("deviceInfo").innerHTML = `
+    <small>
+    Account Region: Global<br>
+    Connection: Secure<br>
+    CPU Threads: ${cpu}<br>
+    RAM Detected: ${ram} GB<br>
+    GPU: ${gpu}<br>
+    Nitro Status: <b class="nitro-status">Pending activation</b>
+    </small>
+  `;
+  document.getElementById("deviceInfo").style.display = "block";
+  document.getElementById("protect").style.display = "block";
+
+  let index = Math.floor(Math.random() * videos.length);
+  player.src = videos[index];
+  player.style.display = "block";
+
+  document.getElementById("videoTitle").style.display = "block";
+  document.getElementById("videoDesc").style.display = "block";
+
+  let postProgress = document.getElementById("postVerifyProgress");
+  postProgress.style.display = "block";
+  let postBar = document.getElementById("barPost");
+  let postWidth = 0;
+  let postScan = setInterval(() => {
+    postWidth += 5;
+    postBar.style.width = postWidth + "%";
+    if(postWidth >= 100) clearInterval(postScan);
+  }, 200);
+
+  player.loop = videos[index] !== "vid1.mp4";
+  player.play();
+};
+</script>
+</body>
+</html>
